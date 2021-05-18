@@ -1,7 +1,7 @@
 ; Tiles for Pop
-
-; Even-row bubbles
-   db $ff,$f8,$e0,$c0,$c0,$80,$80,$80 ; Tile 0
+   db 0,0,0,0,0,0,0,0                 ; Tile 0 - all paper
+; Odd-row bubbles
+   db $ff,$f8,$e0,$c0,$c0,$80,$80,$80 ; Tile 1
    db 0,0,0,0,0,$18,$7e,$ff
    db $ff,$1f,$07,$03,$03,$01,$01,$01
    db $01,$03,$03,$07,$07,$03,$03,$01
@@ -11,12 +11,12 @@
    db $ff,$7e,$18,0,0,0,0,0
    db $ff,$1f,$07,$03,$03,$01,$01,$01
 ; Even/Odd junctures
-   db 0,0,0,0,$c0,$80,$80,$80         ; Tile 9
+   db 0,0,0,0,$c0,$80,$80,$80         ; Tile 10
    db 0,0,0,0,$03,$01,$01,$01
    db $80,$80,$80,$c0,0,0,0,0
    db $01,$01,$01,$03,0,0,0,0
-; Odd-row bubbles
-   db $ff,$ff,$ff,$ff,$ff,$ff,$fe,$fc ; Tile 13
+; Even-row bubbles
+   db $ff,$ff,$ff,$ff,$ff,$ff,$fe,$fc ; Tile 14
    db $ff,$ff,$ff,$ff,$f0,$80,0,0
    db $ff,$ff,$ff,$ff,$0f,$01,0,0
    db $ff,$ff,$ff,$ff,$ff,$ff,$7f,$3f
@@ -32,8 +32,8 @@
    db 0,0,$80,$f0,$ff,$ff,$ff,$ff
    db 0,0,$01,$0f,$ff,$ff,$ff,$ff
    db $3f,$7f,$ff,$ff,$ff,$ff,$ff,$ff
-; Odd/Odd junctures
-   db $ff,$ff,$ff,$ff,$ff,$ff,$7e,$3c ; Tile 29
+; Even/Even junctures
+   db $ff,$ff,$ff,$ff,$ff,$ff,$7e,$3c ; Tile 30
    db $3c,$18,$18,$18,0,0,0,0
    db 0,0,0,0,$18,$18,$18,$3c
    db $3c,$7e,$ff,$ff,$ff,$ff,$ff,$ff
