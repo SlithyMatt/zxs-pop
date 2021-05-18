@@ -1,3 +1,6 @@
+ALL_PAPER = 0
+ALL_INK   = 34
+
 ; Tiles for Pop
    db 0,0,0,0,0,0,0,0                 ; Tile 0 - all paper
 ; Odd-row bubbles
@@ -37,3 +40,5 @@
    db $3c,$18,$18,$18,0,0,0,0
    db 0,0,0,0,$18,$18,$18,$3c
    db $3c,$7e,$ff,$ff,$ff,$ff,$ff,$ff
+; Tile 34: All ink
+   db $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff

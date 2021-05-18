@@ -5,8 +5,12 @@ org $8000
 start:
 jp init
 
+; Memory Segments
+SCREEN_MEM  = $4000
+COLOR_ATTR  = $5800
+
 ; Character Codes
-ENTER       equ $0D
+ENTER       = $0D
 
 tiles:
 include tiles.asm
@@ -27,51 +31,110 @@ init:
    call render_tiles
    ret
 
+tile_offset:
+   dw 0
+
 fill_rows:
    ld ix,rows              ; row data index
-   ld iy,(tile_map+4+2*32) ; tile map(4,2)
-   ld hl,($5800+0+2*32)    ; color attributes(5,2)
+   ld bc,4+2*32            ; (4,2)
+   ld (tile_offset),bc
+   ld iy,tile_map
+   add iy,bc               ; tile_map(4,2)
    ld b,7                  ; bubble counter
    ld c,5                  ; row counter
 @row_loop:
+   ld d,0                  ; corner bitmap
+   ld e,$78                ; set brightness, white paper - e = white/black
    ld a,c
    and $01                 ; check for odd row
    jp z,@even_row
+   push ix                 ; stash iy on stack
+   push bc                 ; stash bc on stack
+   ld bc,(tile_offset)
+   ld iy,COLOR_ATTR
+   add iy,bc               ; iy = color attributes for tile
+   pop bc                  ; restore bc
    ld a,(ix)               ; get bubble color
    or a                    ; check if zero (no bubble)
    jp z,@empty_odd
+   ld d,$10                ; bubble present
    and $07                 ; mask out any invalid bits for ink color
-   ld d,$78                ; set brightness, white paper - d = white/black
-   or d                    ; a = white/color
-   ld (hl),d               ; upper left
-   inc hl
-   ld (hl),a               ; upper center
-   inc hl
-   ld (hl),d               ; upper right
-   push bc                 ; stash b/c on stack
-   ld bc,30                ; go to next tile row
-   add hl,bc
-   ld (hl),a               ; middle left
-   inc hl
-   ld (hl),a               ; center
-   inc hl
-   ld (hl),a               ; middle right
-   add hl,bc               ; last row
-   pop bc                  ; restore b/c
-   ld (hl),d               ; lower left
-   inc hl
-   ld (hl),a               ; lower center
-   inc hl
-   ld (hl),d               ; lower right
+   or e                    ; a = white/color
+   ld (iy),e               ; upper left
+   ld (iy+1),a             ; upper center
+   ld (iy+2),e             ; upper right
+   ld (iy+32),a            ; middle left
+   ld (iy+33),a            ; center
+   ld (iy+34),a            ; middle right
+   ld (iy+64),e            ; lower left
+   ld (iy+65),a            ; lower center
+   ld (iy+66),e            ; lower right
+   pop iy                  ; restore iy
+   jr @check_top
+@empty_odd:
+   ld (iy),e               ; upper left
+   ld (iy+1),e             ; upper center
+   ld (iy+2),e             ; upper right
+   ld (iy+32),e            ; middle left
+   ld (iy+33),e            ; center
+   ld (iy+34),e            ; middle right
+   ld (iy+64),e            ; lower left
+   ld (iy+65),e            ; lower center
+   ld (iy+66),e            ; lower right
+   pop iy                  ; restore iy
+@check_top:
    ld a,5                  ; check for top row
    cp c
-   jr z,@top_row
+   jr z,@check_ll
    ld a,7                  ; check for left end
    cp b
-   jr z,@odd_ul
+   jr z,@check_ur
    ld a,(ix-9)             ; get upper left spot
    or a
-   jr nz,@odd_junc_ul      ; upper left junction if non-zero
+   jr z,@check_ur
+   ld a,$08                ; upper left junction
+   or d
+   ld d,a
+@check_ur:
+   ld a,b                  ; check for right end
+   or a
+   jr z,@check_ll
+   ld a,(ix-8)             ; get upper right spot
+   or a
+   jr z,@check_ll
+   ld a,$04                ; upper right junction
+   or d
+   ld d,a
+@check_ll:
+   ld a,7                  ; check for left end
+   cp b
+   jr z,@check_lr
+   ld a,(ix+7)             ; get lower left spot
+   or a
+   jr z,@check_lr
+   ld a,$02                ; lower left junction
+   or d
+   ld d,a
+@check_lr:
+   ld a,b                  ; check for right end
+   or a
+   jr z,@set_even_tiles
+   ld a,(ix+8)             ; get lower right spot
+   or a
+   jr z,@set_even_tiles
+   ld a,$01                ; lower right junction
+   or d
+   ld d,a
+@set_even_tiles:
+   ld a,$10                ; check for bubble
+   and d
+   jr z,@empty_even_tiles
+   
+
+@empty_even_tiles:
+
+
+
 @odd_ul:
    ld (iy),1               ; upper left, no junction
    jr @odd_uc
@@ -148,7 +211,7 @@ fill_rows:
    ld a,(ix-8)             ; get upper right spot
    or a
    jr z,@empty_ur
-   
+
    ld (iy+1),29            ; odd lower right corner
    jr @empty_middle
 @empty_ur:
@@ -177,7 +240,7 @@ render_tiles:
    ret
 
 ; Deployment
-LENGTH      equ $ - start
+LENGTH      = $ - start
 
 ; option 1: tape
 include TapLib.asm
