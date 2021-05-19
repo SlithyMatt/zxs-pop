@@ -19,16 +19,13 @@ tile_map:
    block (32 * 24),0
 
 include bubbles.asm
+include video.asm
 
 init:
    call fill_rows
    call render_tiles
    ret
 
-
-render_tiles:
-
-   ret
 
 ; Deployment
 LENGTH      = $ - start

@@ -200,13 +200,13 @@ fill_rows:
 @next_odd_bubble:
    inc ix
    dec b
-   jp pe,@next_odd_row
+   jp pe,@next_even_row
    ld de,(tile_offset)
    ld hl,3
    add de,hl
    ld (tile_offset),de
    jp @odd_row_loop
-@next_odd_row:
+@next_even_row:
    dec c
    ld b,6
    ld de,(tile_offset)
@@ -286,6 +286,74 @@ fill_rows:
    ld (iy),ALL_INK         ; upper left side empty
    ld (iy+32),ALL_INK      ; lower left side empty
 @next_even_bubble:
-
+   inc ix
+   dec b
+   jp pe,@next_odd_row
+   ld de,(tile_offset)
+   ld hl,3
+   add de,hl
+   ld (tile_offset),de
+   jp @even_row_loop
+@next_odd_row:
+   ; TODO: last column of right end
+   dec c
+   jp pe,@under_last_row
+   ld b,7
+   ld de,(tile_offset)
+   ld hl,45
+   add de,hl
+   ld (tile_offset),de
+   jp @odd_row_loop
+@under_last_row:
+   ld hl,COLOR_ATTR+5+17*32  ; (5,17)
+   ld a,$78                ; white/black
+   ld c,21
+@under_color_loop:
+   ld (hl),a
+   dec
+   jp po,@under_color_loop
+   ld ix,rows+38           ; beginning of row 6
+   ld iy,tile_map+6+17*32  ; tile map (6,17)
+   ld b,6                  ; loop index (7 iterations)
+   ld a,(ix)               ; get left bubble
+   or a
+   jr z,@under_left_empty
+   ld (iy-1),26
+   jr @under_tile_loop
+   ld (iy-1),ALL_INK
+@under_tile_loop:
+   ld a,(ix)
+   or a
+   jr z,@under_empty
+   ld (iy),27              ; lower left center
+   ld (iy+1),28            ; lower right center
+   ld a,b                  ; check for right end
+   or a
+   jr z,@under_no_right
+   ld a,(ix+1)             ; check right bubble
+   or a
+   jr z,@under_no_right
+   ld (iy+2),33            ; lower corner junction
+   jr @next_under_bubble
+@under_no_right:
+   ld (iy+2),29            ; lower right corner
+   jr @next_under_bubble
+@under_empty:
+   ld (iy),ALL_INK         ; lower left center
+   ld (iy+1),ALL_INK       ; lower right center
+   ld a,b                  ; check for right end
+   or a
+   jr z,@under_empty_no_right
+   ld (iy+2),26            ; lower left corner, right bubble
+   jr @next_under_bubble
+@under_empty_no_right:
+   ld (iy+2),ALL_INK       ; lower right corner
+@next_under_bubble:
+   dec b
+   jp pe,@return
+   inc ix
+   ld de,3
+   add iy,de
+   jr @under_tile_loop
 @return:
    ret
