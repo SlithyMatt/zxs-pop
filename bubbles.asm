@@ -35,8 +35,8 @@ fill_rows:
    ld ix,rows              ; row data index
    ld bc,4+2*32            ; (4,2)
    ld (tile_offset),bc
-   ld b,7                  ; bubble counter
-   ld c,5                  ; row counter
+   ld b,8                  ; bubble counter
+   ld c,6                  ; row counter
 @odd_row_loop:
    ld de,(tile_offset)
    ld iy,tile_map
@@ -118,11 +118,11 @@ fill_rows:
    or d
    ld d,a
 @set_odd_tiles:
-   push bc                 ; stash bc on stack
-   ld bc,0
    ld a,$10                ; check for bubble
    and d
    jr z,@empty_odd_tiles
+   push bc                 ; stash bc on stack
+   ld bc,0
    ld (iy+1),2             ; upper center
    ld (iy+32),4            ; middle left
    ld (iy+33),5            ; center
@@ -200,19 +200,21 @@ fill_rows:
 @next_odd_bubble:
    inc ix
    dec b
-   jp pe,@next_even_row
+   ld a,0
+   cp b
+   jp z,@next_even_row
    ld de,(tile_offset)
    ld hl,3
-   add de,hl
-   ld (tile_offset),de
+   add hl,de
+   ld (tile_offset),hl
    jp @odd_row_loop
 @next_even_row:
    dec c
-   ld b,6
+   ld b,7
    ld de,(tile_offset)
    ld hl,76
-   add de,hl
-   ld (tile_offset),de
+   add hl,de
+   ld (tile_offset),hl
 @even_row_loop:
    ld de,(tile_offset)
    ld iy,tile_map
@@ -288,38 +290,46 @@ fill_rows:
 @next_even_bubble:
    inc ix
    dec b
-   jp pe,@next_odd_row
+   ld a,0
+   cp b
+   jp z,@next_odd_row
    ld de,(tile_offset)
    ld hl,3
-   add de,hl
-   ld (tile_offset),de
+   add hl,de
+   ld (tile_offset),hl
    jp @even_row_loop
 @next_odd_row:
    ; TODO: last column of right end
    dec c
-   jp pe,@under_last_row
-   ld b,7
+   ld a,0
+   cp c
+   jp z,@under_last_row
+   ld b,8
    ld de,(tile_offset)
    ld hl,45
-   add de,hl
-   ld (tile_offset),de
+   add hl,de
+   ld (tile_offset),hl
    jp @odd_row_loop
 @under_last_row:
    ld hl,COLOR_ATTR+5+17*32  ; (5,17)
-   ld a,$78                ; white/black
-   ld c,21
+   ld b,$78                ; white/black
+   ld c,2s                 ; c = loop index
 @under_color_loop:
-   ld (hl),a
-   dec
-   jp po,@under_color_loop
+   ld (hl),b
+   inc hl
+   dec c
+   ld a,0
+   cp c
+   jp nz,@under_color_loop
    ld ix,rows+38           ; beginning of row 6
    ld iy,tile_map+6+17*32  ; tile map (6,17)
-   ld b,6                  ; loop index (7 iterations)
+   ld b,7                  ; loop index
    ld a,(ix)               ; get left bubble
    or a
    jr z,@under_left_empty
    ld (iy-1),26
    jr @under_tile_loop
+@under_left_empty:
    ld (iy-1),ALL_INK
 @under_tile_loop:
    ld a,(ix)
@@ -350,7 +360,9 @@ fill_rows:
    ld (iy+2),ALL_INK       ; lower right corner
 @next_under_bubble:
    dec b
-   jp pe,@return
+   ld a,0
+   cp b
+   jp z,@return
    inc ix
    ld de,3
    add iy,de

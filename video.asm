@@ -1,7 +1,7 @@
 render_tiles:
    ld ix,tile_map          ; ix = tile index
    ld bc,SCREEN_MEM        ; bc = start of tile
-   ld de,32*24-1           ; de = loop index
+   ld de,32*24             ; de = loop index
 @tile_loop:
    push bc                 ; stash bc on stack
    ld b,0
@@ -36,5 +36,8 @@ render_tiles:
 @next:
    inc ix
    dec de
-   jp po,@tile_loop
+   ld a,0
+   or d
+   or e
+   jp nz,@tile_loop
    ret
