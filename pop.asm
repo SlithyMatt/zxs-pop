@@ -8,6 +8,9 @@ start:
 ; Memory Segments
 SCREEN_MEM  = $4000
 COLOR_ATTR  = $5800
+DBL_BUFFER  = $E000
+ATTR_BUFFER = DBL_BUFFER+$1800
+DBLBUF_SIZE = $1B00
 
 ; Character Codes
 ENTER       = $0D
@@ -16,18 +19,17 @@ tiles:
    include tiles.asm
 
 tile_map:
-   block (32 * 24),0
+   block (32 * 24),1
 
    include bubbles.asm
    include video.asm
 
 init:
    call fill_rows
-dbg:
-   nop
-   jr dbg
    call render_tiles
-   jp init ; TODO not just be an infinite loop!
+   call copy_dbl_buffer
+nada:
+   jp nada ; TODO not just be an infinite loop!
    ret
 
 

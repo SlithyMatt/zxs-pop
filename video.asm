@@ -1,6 +1,6 @@
 render_tiles:
    ld ix,tile_map          ; ix = tile index
-   ld bc,SCREEN_MEM        ; bc = start of tile
+   ld bc,DBL_BUFFER        ; bc = start of tile
    ld de,32*24             ; de = loop index
 @tile_loop:
    push bc                 ; stash bc on stack
@@ -26,10 +26,10 @@ render_tiles:
    ld a,b
    sub 8
    ld b,a                  ; bc = start of tile, again
-   ld a,c
-   add 32
-   ld c,a                  ; bc = start of next tile (if carry clear)
-   jr nc,@next
+   inc c                   ; bc = start of next tile (if c > 0)
+   ld a,0
+   or c
+   jr nz,@next
    ld a,b
    add 8
    ld b,a                  ; bc = start of next tile (for sure this time)
@@ -40,4 +40,11 @@ render_tiles:
    or d
    or e
    jp nz,@tile_loop
+   ret
+
+copy_dbl_buffer:
+   ld de,SCREEN_MEM
+   ld hl,DBL_BUFFER
+   ld bc,DBLBUF_SIZE
+   ldir
    ret
