@@ -27,8 +27,8 @@ render_tiles:
    sub 8
    ld b,a                  ; bc = start of tile, again
    inc c                   ; bc = start of next tile (if c > 0)
-   ld a,0
-   or c
+   ;ld a,0
+   ;or c
    jr nz,@next
    ld a,b
    add 8
