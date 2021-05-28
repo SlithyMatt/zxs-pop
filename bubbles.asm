@@ -43,8 +43,6 @@ fill_rows:
 @next_bubble:
    inc ix
    dec b
-   ;ld a,0
-   ;cp b
    jp z,@next_row
    inc de
    inc de                  ; go to next tile offset
@@ -54,8 +52,6 @@ fill_rows:
    add hl,de
    ex de,hl                ; update tile offset to start of next row
    dec c                   ; decrement row counter
-   ;ld a,0
-   ;cp c
    jr z,@return
    bit 0,c
    jr z,@next_even

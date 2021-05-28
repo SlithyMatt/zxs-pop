@@ -28,10 +28,10 @@ tile_map:
 
 init:
    call init_im2           ; initialize Interrupt Mode 2
-@loop:
+@main_loop:
    call fill_rows
    call render_tiles
-   jr @loop ; TODO not just be an infinite loop!
+   jr @main_loop ; TODO not just be an infinite loop!
    ret
 
 
@@ -75,16 +75,16 @@ im2_handler:
    call copy_dbl_buffer
 
    ; restore all registers from stack
-   pop af
-   pop bc
-   pop de
    pop hl
+   pop de
+   pop bc
+   pop af
    ex af,af'                  ; exchange AF and AF'
    exx                        ; exchange BE,DE,HL with BE',DE',HL'
-   pop af
-   pop bc
-   pop de
    pop hl
+   pop de
+   pop bc
+   pop af
    ei                         ; re-enable interrupts
    ret
 
