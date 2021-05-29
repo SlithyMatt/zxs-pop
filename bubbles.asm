@@ -1,19 +1,31 @@
-rows:
-   db 1,2,3,4,5,1,2,3
-   db 5,1,2,3,4,5,1
+bubble_rows:
+   db 1,2,3,4,5,6,2,3
+   db 5,1,2,0,4,5,6
    db 3,4,5,1,2,3,4,3
-   db 2,3,4,5,1,2,3
-   db 5,1,2,3,4,5,1,2
+   db 2,0,0,5,6,2,3
+   db 5,1,2,3,4,0,6,2
    db 4,5,1,2,3,4,5
-   db 1,2,3,4,5,1,2,3
-   db 5,1,2,3,4,5,1
-   db 3,4,5,1,2,3,4,3
+   db 6,2,0,4,5,1,2,3
+   db 5,1,2,3,4,5,6
+
+press_depth:
+   dw 0 ; 0-16
 
 fill_rows:
-   ld ix,rows              ; row data index
+   call draw_press
+   ld ix,bubble_rows       ; row data index
    ld de,8+2*32            ; tile offset (8,2)
+   ld hl,(press_depth)
+   ld a,5
+@depth_mult_32:
+   sla l
+   rl h
+   dec a
+   jr nz,@depth_mult_32
+   add hl,de
+   ex de,hl                ; de = adjusted start of bubble tiles
    ld b,8                  ; bubble counter
-   ld c,9                  ; row counter
+   ld c,8                  ; row counter
 @row_loop:
    ld iy,ATTR_BUFFER
    add iy,de               ; iy = color attributes for tile
@@ -61,4 +73,80 @@ fill_rows:
    ld b,7                  ; re-init bubble counter for even row
    jp @row_loop
 @return:
+   ret
+
+draw_press:
+   ld de,tile_map+8*32     ; de = tilemap(8,1)
+   ld hl,ATTR_BUFFER+8*32  ; hl = color(8,1)
+   ld a,(press_depth)
+   or a
+   jr z,@draw_plate
+   ld b,a
+@shaft_loop:
+   call shaft_color
+   call shaft_space
+   dec b
+   jr z,@end_shaft
+   ld a,10
+   ld (de),a
+   ld a,ALL_INK
+   inc de
+   ld (de),a
+   inc de
+   call shaft_space
+   ld ix,16
+   add ix,de
+   push ix
+   ld de,16
+   add hl,de
+   pop de
+   jr @shaft_loop
+@end_shaft:
+   ld a,11
+   ld (de),a
+   ld a,ALL_INK
+   inc de
+   ld (de),a
+   inc de
+   call shaft_space
+   ld ix,16
+   add ix,de
+   push ix
+   ld de,16
+   add hl,de
+   pop de
+@draw_plate:
+   call shaft_color
+   ld a,12
+   ld (de),a
+   ld a,13
+   ld c,14
+   inc de
+@plate_loop:
+   ld (de),a
+   inc de
+   dec c
+   jr nz,@plate_loop
+   ld a,14
+   ld (de),a
+   ret
+
+shaft_space:
+   ld a,ALL_PAPER
+   ld c,7
+@shaft_space_loop:
+   ld (de),a
+   inc de
+   dec c
+   jr nz,@shaft_space_loop
+   ret
+
+shaft_color:
+   ld a,$07          ; black/gray
+   ld c,16
+@shaft_color_loop:
+   ld (hl),a
+   inc hl
+   dec c
+   jr nz,@shaft_color_loop
    ret

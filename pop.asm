@@ -21,13 +21,14 @@ tiles:
    include tiles.asm
 
 tile_map:
-   block (32 * 24),1
+   block (32 * 24),0
 
    include bubbles.asm
    include video.asm
 
 init:
    call init_im2           ; initialize Interrupt Mode 2
+   call init_tilemap       ; initialize tilemap outside bubble chamber
 @main_loop:
    call fill_rows
    call render_tiles
@@ -87,6 +88,84 @@ im2_handler:
    pop af
    ei                         ; re-enable interrupts
    ret
+
+scoreboard:
+   db 26,15,15,6,7,8,15
+
+score:
+   block(8),0
+
+init_tilemap:
+   ld de,tile_map+7   ; de = tilemap(7,0)
+   ld hl,scoreboard
+   ld bc,7
+   ldir
+   call fill_score
+   ld de,tile_map+22  ; de = tilemap(21,0)
+   ld a,15
+   ld (de),a
+   inc de
+   ld (de),a
+   inc de
+   ld a,27
+   ld (de),a
+   ld de,ATTR_BUFFER+7  ; de = color(7,0)
+   ld a,$42          ; black/red
+   ld b,18
+@scoreboard_color_loop:
+   ld (de),a
+   inc de
+   dec b
+   jr nz,@scoreboard_color_loop
+   ld ix,tile_map+7+32      ; ix = tilemap(7,1)
+   ld iy,ATTR_BUFFER+7+32  ; iy = color(7,1)
+   ex af,af'               ; a' = black/red
+   ld a,9                  ; a = girder tile
+   ld b,19
+   ld de,32
+@girder_loop:
+   ld (ix),a
+   ld (ix+17),a
+   ex af,af'               ; get af'
+   ld (iy),a
+   ld (iy+17),a
+   ex af,af'               ; stash af'
+   add ix,de
+   add iy,de
+   dec b
+   jr nz,@girder_loop
+   ret
+
+fill_score:
+   ld de,tile_map+14  ; de = tilemap(13,0)
+   ld hl,score
+   ld b,0
+   ld c,7
+@score_tile_loop:
+   ld a,b
+   or (hl)
+   jr z,@blank_lead
+   ld b,1
+   ld a,(hl)
+   or $10
+   jr @set_score_tile
+@blank_lead:
+   ld a,15
+@set_score_tile:
+   ld (de),a
+   inc hl
+   inc de
+   dec c
+   jr nz,@score_tile_loop
+   ld a,(hl)
+   or $10
+   ld (de),a
+   ret
+
+   org DBL_BUFFER
+   block (32*192),0  ; screen bitmap
+   block (32*24),$47 ; color attributes (black/white)
+
 
 ; Deployment
 LENGTH      = $ - start
