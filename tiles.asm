@@ -18,7 +18,7 @@ ALL_INK   = 1
 
    db $e3,$f3,$db,$cf,$c7,$cf,$db,$f3 ; Tile 9 - vertical girder
    db $af,$9f,$af,$9f,$af,$9f,$af,$9f ; Tile 10 - press shaft
-   db $af,$9f,$af,$9f,$af,$9f,$af,$83 ; Tile 11 - press shaft bottom
+   db $af,$9f,$af,$9f,$af,$9f,$af,$80 ; Tile 11 - press shaft bottom
    db $3f,$67,$df,$bf,$bf,$df,$60,$3f ; tile 12 - press plate left
    db $ff,$ff,$ff,$ff,$ff,$ff,$00,$ff ; tile 13 - press plate middle
    db $fc,$e6,$fb,$fd,$fd,$fb,$06,$fc ; tile 14 - press plate right

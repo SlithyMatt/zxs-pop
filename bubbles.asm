@@ -9,7 +9,7 @@ bubble_rows:
    db 5,1,2,3,4,5,6
 
 press_depth:
-   dw 0 ; 0-16
+   dw 2 ; 0-16
 
 fill_rows:
    call draw_press
@@ -66,18 +66,18 @@ fill_rows:
    dec c                   ; decrement row counter
    jr z,@return
    bit 0,c
-   jr z,@next_even
+   jr nz,@next_odd
    ld b,8                  ; re-init bubble counter for odd row
    jp @row_loop
-@next_even:
+@next_odd:
    ld b,7                  ; re-init bubble counter for even row
    jp @row_loop
 @return:
    ret
 
 draw_press:
-   ld de,tile_map+8*32     ; de = tilemap(8,1)
-   ld hl,ATTR_BUFFER+8*32  ; hl = color(8,1)
+   ld de,tile_map+8+32     ; de = tilemap(8,1)
+   ld hl,ATTR_BUFFER+8+32  ; hl = color(8,1)
    ld a,(press_depth)
    or a
    jr z,@draw_plate
