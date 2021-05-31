@@ -38,3 +38,13 @@ ALL_INK   = 1
 
    db $0f,$3f,$7b,$7b,$ef,$cf,$db,$f3 ; tile 26 - chamber UL corner
    db $f0,$fc,$de,$f6,$df,$cf,$db,$f3 ; tile 27 - chamber UR corner
+   db $00,$18,$3c,$3c,$18,$99,$ff,$ff ; tile 28 - chambler lower corner
+   db $22,$22,$22,$77,$ff,$ff,$ff,$ff ; tile 29 - chamber left bottom
+   db 0,0,0,0,$c0,$f0,$fc,$ff         ; tile 30 - chamber left ramp
+   db 0,0,0,0,$03,$0f,$3f,$ff         ; tile 31 - chamber right ramp
+
+   ; ASCII
+   block (95*8),0  ; TODO: define custom characters
+
+   ; More graphics
+   db $44,$44,$44,$ee,$ff,$ff,$ff,$ff ; tile 127 - chamber right bottom

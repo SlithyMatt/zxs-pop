@@ -93,7 +93,8 @@ scoreboard:
    db 26,15,15,6,7,8,15
 
 score:
-   block(8),0
+   ;block(8),0
+   db 1,2,3,4,5,6,7,8
 
 init_tilemap:
    ld de,tile_map+7   ; de = tilemap(7,0)
@@ -134,6 +135,37 @@ init_tilemap:
    add iy,de
    dec b
    jr nz,@girder_loop
+   ld a,28                 ; chamber lower corners
+   ld (ix),a
+   ld (ix+17),a
+   inc a                   ; chamber left bottom (29)
+   ld (ix+1),a
+   ld (ix+2),a
+   ld (ix+3),a
+   ld (ix+4),a
+   inc a                   ; chamber left bottom ramp (30)
+   ld (ix+5),a
+   inc a                   ; chamber right bottom ramp (31)
+   ld (ix+12),a
+   ld a,127                ; chamber right bottom
+   ld (ix+13),a
+   ld (ix+14),a
+   ld (ix+15),a
+   ld (ix+16),a
+   ld a,$17                ; dark red/gray
+   ld (iy),a               ; chamber LL corner
+   ld (iy+17),a            ; chamber LR corner
+   ld a,$07                ; black/gray
+   ld (iy+1),a             ; chamber left bottom
+   ld (iy+2),a
+   ld (iy+3),a
+   ld (iy+4),a
+   ld (iy+5),a             ; chamber left bottom ramp
+   ld (iy+12),a            ; chamber right bottom ramp
+   ld (iy+13),a            ; chamber right bottom
+   ld (iy+14),a
+   ld (iy+15),a
+   ld (iy+16),a
    ret
 
 fill_score:
