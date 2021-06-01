@@ -173,7 +173,7 @@ init_tilemap:
    ld (iy+14),a
    ld (iy+15),a
    ld (iy+16),a
-   ld hl,tile_map+20+13*32 ; hl = tilemap (20,13)
+   ld hl,tile_map+13+20*32 ; hl = tilemap (13,20)
    ld de,cannon
    ld b,6
    ld c,4
@@ -188,9 +188,10 @@ init_tilemap:
    ld de,26
    add hl,de
    pop de
+   ld b,6
    dec c
    jr nz,@cannon_row_loop
-   ld hl,ATTR_BUFFER+20+13*32 ; hl = color (20,13)
+   ld hl,ATTR_BUFFER+13+20*32 ; hl = color (13,20)
    ld a,$02                ; black/dark red
    ld b,6
    ld c,4
@@ -201,10 +202,11 @@ init_tilemap:
    jr nz,@cannon_color_loop
    ld de,26
    add hl,de
+   ld b,6
    dec c
    jr nz,@cannon_color_loop
-   ld ix,ATTR_BUFFER+22+14*32 ; ix = color (22,14)
-   ld a,$43             ; black/green TODO: change to black/black
+   ld ix,ATTR_BUFFER+15+21*32 ; ix = color (15,21)
+   ld a,$44             ; black/green TODO: change to black/black
    ld (ix),a
    ld (ix+1),a
    ld (ix+32),a
