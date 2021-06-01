@@ -48,3 +48,17 @@ ALL_INK   = 1
 
    ; More graphics
    db $44,$44,$44,$ee,$ff,$ff,$ff,$ff ; tile 127 - chamber right bottom
+   db 0,0,0,$0e,$0f,$07,$03,$03       ; tile 128 - cannon left top - 0
+   db 0,0,0,$70,$f0,$e0,$c0,$c0       ; tile 129 - cannon right top - 0
+   db $07,$06,$0e,$0c,$5c,$5c,$d8,$d8 ; tile 130 - cannon left middle - 0
+   db $e0,$60,$70,$30,$3a,$3a,$1b,$1b ; tile 131 - cannon right middle - 0
+   db $00,$01,$01,$01,$01,$03,$03,$03 ; tile 132 - cannon base
+   db $d8,$d8,$dc,$dc,$cc,$ee,$66,$77 ; tile 133 - "
+   db $1b,$1b,$3b,$3b,$33,$77,$66,$ee ; tile 134 - "
+   db $00,$80,$80,$80,$80,$c0,$c0,$c0 ; tile 135 - "
+   db $07,$06,$06,$0e,$0d,$18,$7f,$ff ; tile 136 - "
+   db $33,$39,$1c,$2e,$47,$83,$ff,$ff ; tile 137 - "
+   db $80,$e0,$fc,$3f,$8f,$e0,$ff,$ff ; tile 138 - "
+   db $01,$07,$3f,$fc,$f1,$07,$ff,$ff ; tile 139 - "
+   db $cc,$9c,$38,$74,$e2,$c1,$ff,$ff ; tile 140 - "
+   db $e0,$60,$60,$70,$b0,$18,$fe,$ff ; tile 141 - "

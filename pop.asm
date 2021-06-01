@@ -94,7 +94,14 @@ scoreboard:
 
 score:
    ;block(8),0
-   db 1,2,3,4,5,6,7,8
+   db 0,0,0,0,4,0,9,6
+
+cannon:
+   db 0,128,0,0,129,0
+   db 0,130,2,3,131,0
+   db 132,133,4,5,134,135
+   db 136,137,138,139,140,141
+
 
 init_tilemap:
    ld de,tile_map+7   ; de = tilemap(7,0)
