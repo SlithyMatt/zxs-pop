@@ -47,18 +47,57 @@ ALL_INK   = 1
    block (95*8),0  ; TODO: define custom characters
 
    ; More graphics
-   db $44,$44,$44,$ee,$ff,$ff,$ff,$ff ; tile 127 - chamber right bottom
-   db 0,0,0,$0e,$0f,$07,$03,$03       ; tile 128 - cannon left top - 0
-   db 0,0,0,$70,$f0,$e0,$c0,$c0       ; tile 129 - cannon right top - 0
-   db $07,$06,$0e,$0c,$5c,$5c,$d8,$d8 ; tile 130 - cannon left middle - 0
-   db $e0,$60,$70,$30,$3a,$3a,$1b,$1b ; tile 131 - cannon right middle - 0
-   db $00,$01,$01,$01,$01,$03,$03,$03 ; tile 132 - cannon base
-   db $d8,$d8,$dc,$dc,$cc,$ee,$66,$77 ; tile 133 - "
-   db $1b,$1b,$3b,$3b,$33,$77,$66,$ee ; tile 134 - "
-   db $00,$80,$80,$80,$80,$c0,$c0,$c0 ; tile 135 - "
-   db $07,$06,$06,$0e,$0d,$18,$7f,$ff ; tile 136 - "
-   db $33,$39,$1c,$2e,$47,$83,$ff,$ff ; tile 137 - "
-   db $80,$e0,$fc,$3f,$8f,$e0,$ff,$ff ; tile 138 - "
-   db $01,$07,$3f,$fc,$f1,$07,$ff,$ff ; tile 139 - "
-   db $cc,$9c,$38,$74,$e2,$c1,$ff,$ff ; tile 140 - "
-   db $e0,$60,$60,$70,$b0,$18,$fe,$ff ; tile 141 - "
+   db $44,$44,$44,$ee,$ff,$ff,$ff,$ff  ; tile 127 - chamber right bottom
+   db 0,0,0,$0e,$0f,$07,$03,$03        ; tile 128 - cannon left top - 0
+   db 0,0,0,$70,$f0,$e0,$c0,$c0        ; tile 129 - cannon right top - 0
+   db $07,$06,$0e,$0c,$5c,$5c,$d8,$d8  ; tile 130 - cannon left middle - 0
+   db $e0,$60,$70,$30,$3a,$3a,$1b,$1b  ; tile 131 - cannon right middle - 0
+   db $00,$01,$01,$01,$01,$03,$03,$03  ; tile 132 - cannon base
+   db $d8,$d8,$dc,$dc,$cc,$ee,$66,$77  ; tile 133 - "
+   db $1b,$1b,$3b,$3b,$33,$77,$66,$ee  ; tile 134 - "
+   db $00,$80,$80,$80,$80,$c0,$c0,$c0  ; tile 135 - "
+   db $07,$06,$06,$0e,$0d,$18,$7f,$ff  ; tile 136 - "
+   db $33,$39,$1c,$2e,$47,$83,$ff,$ff  ; tile 137 - "
+   db $80,$e0,$fc,$3f,$8f,$e0,$ff,$ff  ; tile 138 - "
+   db $01,$07,$3f,$fc,$f1,$07,$ff,$ff  ; tile 139 - "
+   db $cc,$9c,$38,$74,$e2,$c1,$ff,$ff  ; tile 140 - "
+   db $e0,$60,$60,$70,$b0,$18,$fe,$ff  ; tile 141 - "
+   db 0,0,0,$07,$07,$07,$03,$03        ; tile 142 - cannon 3.5
+   db 0,0,0,0,$80,0,0,0                ; tile 143 - "
+   db 0,0,0,0,$70,$f0,$e0,$c0          ; tile 144 - "
+   db $c0,$e0,$60,$70,$32,$3a,$1b,$1b  ; tile 145 - "
+   db 0,0,0,0,$0e,$0f,$07,$03          ; tile 146 - cannon -3.5
+   db 0,0,0,0,$01,0,0,0                ; tile 147 - "
+   db 0,0,0,$e0,$e0,$e0,$c0,$c0        ; tile 148 - "
+   db $03,$07,$06,$0e,$4c,$5c,$d8,$d8  ; tile 149 - "
+   db 0,0,$03,$07,$03,$01,$01,$02      ; tile 150 - cannon 7
+   db 0,0,$80,$80,$80,$80,$80,$80      ; tile 151 - "
+   db 0,0,0,0,0,$38,$78,$70            ; tile 152 - "
+   db $60,$60,$70,$30,$3a,$3a,$1b,$1b  ; tile 153 - "
+   db 0,0,0,0,0,$1c,$1e,$0e            ; tile 154 - cannon -7
+   db 0,0,$01,$01,$01,$01,$01,$01      ; tile 155 - "
+   db 0,0,$c0,$e0,$c0,$80,$80,$c0      ; tile 156 - "
+   db $06,$06,$0e,$0e,$5c,$5c,$d8,$d8  ; tile 157 - "
+   db $0,0,$03,$03,$01,0,$01,$03       ; tile 158 - cannon 10.5
+   db 0,0,$80,$c0,$c0,$c0,$c0,$80      ; tile 159 - "
+   db 0,0,0,0,0,0,$18,$3c              ; tile 160 - "
+   db $38,$70,$70,$30,$3a,$3a,$1b,$1b  ; tile 161 - "
+   db 0,0,$01,$03,$03,$03,$03,$01      ; tile 162 - cannon -10.5
+   db 0,0,$c0,$c0,$80,0,$80,$c0        ; tile 163 - "
+   db $1c,$0e,$0e,$0c,$5c,$5c,$d8,$d8  ; tile 164 - "
+   db 0,0,$01,0,0,0,$01,$03            ; tile 165 - cannon 14
+   db 0,$e0,$e0,$e0,$60,$e0,$c0,$80    ; tile 166 - "
+   db 0,0,0,0,0,0,$0c,$1e              ; tile 167 - "
+   db $38,$30,$30,$30,$3a,$3a,$1b,$1b  ; tile 168 - "
+   db 0,0,0,0,0,0,$30,$78              ; tile 169 - cannon -14
+   db 0,$07,$07,$07,$06,$07,$03,$01    ; tile 170 - "
+   db 0,0,$80,0,0,0,$80,$c0            ; tile 171 - "
+   db $1c,$0c,$0c,$0c,$5c,$5c,$d8,$d8  ; tile 172 - "
+   db 0,0,0,0,0,0,$01,$03              ; tile 173 - cannon 17.5
+   db $c0,$f0,$f0,$70,$70,$e0,$e0,$c0  ; tile 174 - "
+   db 0,0,0,0,0,0,0,$1e                ; tile 175 - "
+   db $1c,$38,$30,$30,$32,$3a,$1b,$1b  ; tile 176 - "
+   db 0,0,0,0,0,0,0,$78                ; tile 177 - cannon -17.5
+   db $03,$0f,$0f,$0e,$0e,$07,$07,$03  ; tile 178 - "
+   db 0,0,0,0,0,0,0,$80,$c0            ; tile 179 - "
+   db $38,$1c,$0c,$0c,$4c,$5c,$d8,$d8  ; tile 180 - "
