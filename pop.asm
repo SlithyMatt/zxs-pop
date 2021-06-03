@@ -25,13 +25,13 @@ tile_map:
 
    include bubbles.asm
    include video.asm
+   include cannon.asm
 
 init:
    call init_im2           ; initialize Interrupt Mode 2
    call init_tilemap       ; initialize tilemap outside bubble chamber
 @main_loop:
-   call fill_rows
-   call render_tiles
+   nop
    jr @main_loop ; TODO not just be an infinite loop!
    ret
 
@@ -74,6 +74,9 @@ im2_handler:
 
    ; Interrupt routine:
    call copy_dbl_buffer
+   call fill_rows
+   call cannon_tick
+   call render_tiles
 
    ; restore all registers from stack
    pop hl
