@@ -129,4 +129,50 @@ cannon_tick:
    ld b,4
    jr @cannon_tile_loop
 @return_cannon_tick:
+   call render_cannon_top
+   ret
+
+render_cannon_top:
+   ld ix,tile_map+14+20*32          ; ix = tilemap(14,20) start
+   ld bc,DBL_BUFFER+14+(20*32 & $E0)+(20*256 & $1800) ; bc = start of tile(14,20) in buffer
+   ld d,4
+   ld e,2
+@rct_tile_loop:
+   push bc                 ; stash bc on stack
+   ld b,0
+   ld c,(ix)               ; bc = tile index
+   sla c
+   rl b
+   sla c
+   rl b
+   sla c
+   rl b                    ; bc = tile index*8
+   ld hl,tiles
+   add hl,bc               ; hl = tile starting address
+   pop bc                  ; restore bc
+@rct_write_loop:
+   ld a,(hl)
+   inc hl
+   ld (bc),a
+   inc b
+   ld a,$07
+   and b
+   jr nz,@rct_write_loop
+   ld a,b
+   sub 8
+   ld b,a                  ; bc = start of tile, again
+   inc c                   ; bc = start of next tile (if c > 0)
+   jr nz,@rct_next
+   ld a,b
+   add 8
+   ld b,a                  ; bc = start of next tile (for sure this time)
+@rct_next:
+   inc ix
+   dec d
+   jp nz,@rct_tile_loop
+   ld d,4
+   ld ix,tile_map+14+21*32          ; ix = tilemap(14,21) start
+   ld bc,DBL_BUFFER+14+(21*32 & $E0)+(21*256 & $1800) ; bc = start of tile(14,21) in buffer
+   dec e
+   jp nz,@rct_tile_loop
    ret
