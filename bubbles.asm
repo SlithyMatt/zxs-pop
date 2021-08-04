@@ -21,7 +21,7 @@ fill_rows:
    sla l
    rl h
    dec a
-   jr nz,@depth_mult_32
+   jp nz,@depth_mult_32
    add hl,de
    ex de,hl                ; de = adjusted start of bubble tiles
    ld b,8                  ; bubble counter
@@ -31,6 +31,9 @@ fill_rows:
    add iy,de               ; iy = color attributes for tile
    ld a,(ix)               ; get bubble color
    and $07                 ; mask out any invalid bits for ink color
+   jp nz,@make_color
+   ld a,$07                ; make foreground white if bubble not present
+@make_color:
    or $40                  ; a = black/color
    ld (iy),a               ; upper left
    ld (iy+1),a             ; upper right
@@ -40,14 +43,14 @@ fill_rows:
    add iy,de
    ld a,(ix)               ; check for bubble
    or a
-   jr z,@empty_tiles
+   jp z,@empty_tiles
    ld (iy),2               ; upper left
    ld (iy+1),3             ; upper right
    ld (iy+32),4            ; lower left
    ld (iy+33),5            ; lower right
    jp @next_bubble
 @empty_tiles:
-   ld a,ALL_INK
+   ld a,ALL_PAPER
    ld (iy),a               ; upper left
    ld (iy+1),a             ; upper right
    ld (iy+32),a            ; lower left
@@ -64,9 +67,9 @@ fill_rows:
    add hl,de
    ex de,hl                ; update tile offset to start of next row
    dec c                   ; decrement row counter
-   jr z,@return
+   jp z,@return
    bit 0,c
-   jr nz,@next_odd
+   jp nz,@next_odd
    ld b,8                  ; re-init bubble counter for odd row
    jp @row_loop
 @next_odd:
@@ -80,13 +83,13 @@ draw_press:
    ld hl,ATTR_BUFFER+8+32  ; hl = color(8,1)
    ld a,(press_depth)
    or a
-   jr z,@draw_plate
+   jp z,@draw_plate
    ld b,a
 @shaft_loop:
    call shaft_color
    call shaft_space
    dec b
-   jr z,@end_shaft
+   jp z,@end_shaft
    ld a,10
    ld (de),a
    ld a,ALL_INK
@@ -100,7 +103,7 @@ draw_press:
    ld de,16
    add hl,de
    pop de
-   jr @shaft_loop
+   jp @shaft_loop
 @end_shaft:
    ld a,11
    ld (de),a
@@ -126,7 +129,7 @@ draw_press:
    ld (de),a
    inc de
    dec c
-   jr nz,@plate_loop
+   jp nz,@plate_loop
    ld a,14
    ld (de),a
    ret
@@ -138,7 +141,7 @@ shaft_space:
    ld (de),a
    inc de
    dec c
-   jr nz,@shaft_space_loop
+   jp nz,@shaft_space_loop
    ret
 
 shaft_color:
@@ -148,5 +151,5 @@ shaft_color:
    ld (hl),a
    inc hl
    dec c
-   jr nz,@shaft_color_loop
+   jp nz,@shaft_color_loop
    ret

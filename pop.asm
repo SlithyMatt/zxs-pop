@@ -33,7 +33,7 @@ init:
 @main_loop:
    call fill_rows
    call render_tiles
-   jr @main_loop ; TODO not just be an infinite loop!
+   jp @main_loop ; TODO not just be an infinite loop!
    ret
 
 
@@ -47,7 +47,7 @@ init_im2:
 @loop:
    ld (de),a                  ; set byte in IM2 table to $FD
    inc e                      ; de = next byte (unless e = 0)
-   jr nz,@loop                ; loop until whole page is set to $FD (e = 0)
+   jp nz,@loop                ; loop until whole page is set to $FD (e = 0)
    inc d                      ; de = 257th byte of table
    ld (de),a                  ; set last byte to $FD
    ld (hl),$C3                ; place unconditional JP opcode at vector
@@ -130,7 +130,7 @@ init_tilemap:
    ld (de),a
    inc de
    dec b
-   jr nz,@scoreboard_color_loop
+   jp nz,@scoreboard_color_loop
    ld ix,tile_map+7+32      ; ix = tilemap(7,1)
    ld iy,ATTR_BUFFER+7+32  ; iy = color(7,1)
    ex af,af'               ; a' = black/red
@@ -147,7 +147,7 @@ init_tilemap:
    add ix,de
    add iy,de
    dec b
-   jr nz,@girder_loop
+   jp nz,@girder_loop
    ld a,28                 ; chamber lower corners
    ld (ix),a
    ld (ix+17),a
@@ -189,14 +189,14 @@ init_tilemap:
    inc hl
    inc de
    dec b
-   jr nz,@cannon_row_loop
+   jp nz,@cannon_row_loop
    push de
    ld de,26
    add hl,de
    pop de
    ld b,6
    dec c
-   jr nz,@cannon_row_loop
+   jp nz,@cannon_row_loop
    ld hl,ATTR_BUFFER+13+20*32 ; hl = color (13,20)
    ld a,$02                ; black/dark red
    ld b,6
@@ -205,12 +205,12 @@ init_tilemap:
    ld (hl),a
    inc hl
    dec b
-   jr nz,@cannon_color_loop
+   jp nz,@cannon_color_loop
    ld de,26
    add hl,de
    ld b,6
    dec c
-   jr nz,@cannon_color_loop
+   jp nz,@cannon_color_loop
    ld ix,ATTR_BUFFER+15+21*32 ; ix = color (15,21)
    ld a,$44             ; black/green TODO: change to black/black
    ld (ix),a
@@ -227,11 +227,11 @@ fill_score:
 @score_tile_loop:
    ld a,b
    or (hl)
-   jr z,@blank_lead
+   jp z,@blank_lead
    ld b,1
    ld a,(hl)
    or $10
-   jr @set_score_tile
+   jp @set_score_tile
 @blank_lead:
    ld a,15
 @set_score_tile:
@@ -239,7 +239,7 @@ fill_score:
    inc hl
    inc de
    dec c
-   jr nz,@score_tile_loop
+   jp nz,@score_tile_loop
    ld a,(hl)
    or $10
    ld (de),a

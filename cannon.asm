@@ -74,22 +74,22 @@ cannon_tick:
    in a,($FE)                 ; read key row
    ld hl,cannon_left_key+1
    and (hl)                   ; check key bit
-   jr nz,@check_cannon_right  ; check right key if not clear
+   jp nz,@check_cannon_right  ; check right key if not clear
    ld a,(cannon_position)
    or a
-   jr z,@check_cannon_right   ; can't go left, check right
+   jp z,@check_cannon_right   ; can't go left, check right
    dec a                      ; move left
    ld (cannon_position),a     ; set new position
-   jr @check_cannon_fire
+   jp @check_cannon_fire
 @check_cannon_right:
    ld a,(cannon_right_key)
    in a,($FE)                 ; read key row
    ld hl,cannon_right_key+1
    and (hl)                   ; check key bit
-   jr nz,@check_cannon_fire   ; check fire key if not clear
+   jp nz,@check_cannon_fire   ; check fire key if not clear
    ld a,(cannon_position)
    cp CANNON_MAXPOS
-   jr z,@check_cannon_fire    ; can't go right check fire
+   jp z,@check_cannon_fire    ; can't go right check fire
    inc a                      ; move right
    ld (cannon_position),a     ; set new position
 @check_cannon_fire:
@@ -98,7 +98,7 @@ cannon_tick:
    in a,($FE)                 ; read key row
    ld hl,cannon_fire_key+1
    and (hl)                   ; check key bit
-   jr nz,@set_cannon_tiles    ; just set tiles if not clear
+   jp nz,@set_cannon_tiles    ; just set tiles if not clear
    ; TODO set bubble trajectory
 @set_cannon_tiles:
    ld a,(cannon_position)
@@ -119,19 +119,15 @@ cannon_tick:
    inc de
    inc hl
    dec b
-   jr nz,@cannon_tile_loop    ; loop until row is done
+   jp nz,@cannon_tile_loop    ; loop until row is done
    dec c
-   jr z,@return_cannon_tick
+   jp z,render_cannon_top
    push de
    ld de,28
    add hl,de                  ; hl = next row
    pop de
    ld b,4
-   jr @cannon_tile_loop
-@return_cannon_tick:
-   call render_cannon_top
-   ret
-
+   jp @cannon_tile_loop
 render_cannon_top:
    ld ix,tile_map+14+20*32          ; ix = tilemap(14,20) start
    ld bc,DBL_BUFFER+14+(20*32 & $E0)+(20*256 & $1800) ; bc = start of tile(14,20) in buffer
@@ -157,12 +153,12 @@ render_cannon_top:
    inc b
    ld a,$07
    and b
-   jr nz,@rct_write_loop
+   jp nz,@rct_write_loop
    ld a,b
    sub 8
    ld b,a                  ; bc = start of tile, again
    inc c                   ; bc = start of next tile (if c > 0)
-   jr nz,@rct_next
+   jp nz,@rct_next
    ld a,b
    add 8
    ld b,a                  ; bc = start of next tile (for sure this time)

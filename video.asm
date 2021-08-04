@@ -22,12 +22,12 @@ render_tiles:
    inc b
    ld a,$07
    and b
-   jr nz,@write_loop
+   jp nz,@write_loop
    ld a,b
    sub 8
    ld b,a                  ; bc = start of tile, again
    inc c                   ; bc = start of next tile (if c > 0)
-   jr nz,@next
+   jp nz,@next
    ld a,b
    add 8
    ld b,a                  ; bc = start of next tile (for sure this time)
