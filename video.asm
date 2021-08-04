@@ -1,3 +1,21 @@
+refresh_rectangle:
+   db 0,0,32,24            ; x_start, y_start, x_end, y_end
+
+set_rectangle: ; BC = start x,y; DE = end x,y
+   ld a,(refresh_rectangle)
+   cp b
+   jr nc,@check_c
+   ld a,b
+   ld (refresh_rectangle),a
+@check_c:
+   ld a,(refresh_rectangle+1)
+   cp c
+   jr nc,@check_d
+   ld a,c
+   ld (refresh_rectangle+1),a
+@check_d:
+   ret
+
 render_tiles:
    ld ix,tile_map          ; ix = tile index
    ld bc,DBL_BUFFER        ; bc = start of tile
