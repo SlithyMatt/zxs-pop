@@ -68,6 +68,20 @@ cannon_tiles:
    db 173,213,214,0 ; 45.5
    db 130,2,3,215
 
+bubble_sprite:
+   db $01,$C0
+   db $03,$E0
+   db $07,$F0
+   db $0F,$F8
+   db $0B,$F8
+   db $0B,$F8
+   db $05,$F0
+   db $02,$60
+   db $01,$C0
+
+bubble_sprite_pos:
+   dw $4000 ; -45.5 (,)
+
 cannon_tick:
    ; check for keys
    ld a,(cannon_left_key)
